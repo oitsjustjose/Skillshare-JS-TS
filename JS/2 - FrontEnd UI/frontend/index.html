@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 2 - Frontend</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+        integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://oitsjustjose.com/JuiceUI/Libraries/fontawesome/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+        integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+        crossorigin="anonymous"></script>
+    <script src="index.js"></script>
+</head>
+
+<body>
+    <div class="container mt-3" style="max-width: 768px; width: 98vw">
+        <h2 class="text-center"><span>No-DB Sample Notebook&nbsp;<i class="fas fa-book-open"></i></span></h2>
+
+        <ul id="notebook-thoughts"></ul>
+    </div>
+
+    <hr>
+
+    <div class="container mt-3" style="max-width: 768px; width: 98vw; height: 90vh; max-height:90vh;">
+        <h2 class="text-center"><span>Create An Entry&nbsp;<i class="fas fa-pen"></i></span></h2>
+        <form>
+            <div>
+                <input placeholder="What's On Your Mind?" class="form-control" name="new-entry" type="text">
+            </div>
+            <button id="submit" class="btn btn-primary m-auto mb-3 mt-3 d-block">Add Note</button>
+        </form>
+    </div>
+
+
+    <div class="container mt-3" style="max-width: 768px; width: 98vw; ">
+        <h2 class="text-center">
+            <span>
+                Why This Isn't Perfect&nbsp;
+                <i class="fas fa-exclamation-triangle"></i>
+            </span>
+        </h2>
+
+        <p>
+            Since the list of notes is just an array, it is only stored in memory. This means that when the server
+            restarts, there's no way to make it last between restarts. We can always read and write it to the drive, but
+            that's not fast, secure or wise (in the event of a power-outage, for example, any new data would likely be
+            gone).
+        </p>
+    </div>
+
+</body>
+
+</html>
