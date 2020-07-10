@@ -105,8 +105,10 @@ app.post('/login', async (req, res) => {
         });
 
         if (user) {
-            /* Because the password *is not* plain text anymore, we want to check
-            if (user.password == password) {
+            /*  Because the password *is not* plain text anymore,
+                  we want to check the encrypted password
+            */
+            if (user.validPassword(password)) {
                 const authToken = crypto.randomBytes(128).toString('hex');
 
                 const token = new Tokens();
