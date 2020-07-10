@@ -13,7 +13,10 @@ const renderNote = (note) => {
         if (confirm(`Do You Want To Delete Your Post ${note.name}?`)) {
             const resp = await fetch('http://localhost:3030', {
                 method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': sessionStorage.getItem('AuthToken')
+                },
                 body: JSON.stringify({
                     _id: note._id
                 })
@@ -50,7 +53,10 @@ const initFormListener = () => {
 
         const resp = await fetch('http://localhost:3030', {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': sessionStorage.getItem('AuthToken')
+            },
             body: JSON.stringify({
                 note: noteInp.value,
                 name: nameInp.value
@@ -72,27 +78,70 @@ const initFormListener = () => {
     });
 };
 
+const initLogInOutBtn = () => {
+    const loggedIn = sessionStorage.getItem('AuthToken');
+
+    const navItem = document.getElementById('nav-item');
+    const navLink = document.createElement('a');
+    navLink.href = loggedIn ? '/' : '/login';
+    navLink.className = 'nav-link';
+
+    if (loggedIn) {
+        navItem.addEventListener('click', async (evt) => {
+            evt.preventDefault();
+
+            const resp = await fetch('http://localhost:3030/logout', {
+                method: 'POST',
+                body: JSON.stringify({
+                    AuthToken: sessionStorage.getItem('authToken')
+                })
+            });
+
+            if (resp.status === 200) {
+                sessionStorage.clear();
+                location.assign(navLink.href);
+            } else {
+                const asJson = await resp.json();
+                alert(`Server Error: ${asJson.error}`);
+            }
+        });
+    }
+
+    navLink.innerHTML = loggedIn ?
+        `<span><i class="fas fa-sign-out-alt"></i>&nbsp; Log Out</span>` :
+        `<span><i class="fas fa-sign-in-alt"></i>&nbsp; Log In</span>`;
+
+    navItem.appendChild(navLink);
+};
+
 window.addEventListener('load', async () => {
     initFormListener();
-    /* Load the notes from our server! */
 
-    const resp = await fetch('http://localhost:3030', {
-        method: 'post'
+    /* Load the notes from our server! */
+    const resp = await fetch('http://localhost:3030/', {
+        method: 'POST',
+        headers: {
+            'authorization': sessionStorage.getItem('AuthToken')
+        }
     });
 
     if (resp.status === 200) {
         const asJson = await resp.json();
         asJson.forEach((note) => {
-            renderNote(note);
+            if (note) {
+                renderNote(note);
+            }
         });
     } else {
         const notesList = document.getElementById('notebook-thoughts');
         const notice = document.createElement('h3');
         notice.className = 'd-block m-auto text-center';
-        notice.style.color = 'var(--bs-info)'
+        notice.style.color = 'var(--bs-info)';
         notice.innerText = 'Please Log In To See Your Notes';
         notesList.appendChild(notice);
 
         document.getElementById('make-note').style.display = 'none';
+        sessionStorage.clear();
     }
+    initLogInOutBtn();
 });
